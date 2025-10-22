@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vision Info Table</title>
+    <link rel="stylesheet" href="vision.css" />
+  </head>
+
+  <body>
+    <h1>Vision Info Table</h1>
+
+    <table id="data-table">
+      <thead></thead>
+      <tbody></tbody>
+    </table>
+
+    <script>
+      async function loadCSV() {
+        const response = await fetch('VisionInfo.csv');
+        const arrayBuffer = await response.arrayBuffer();
+        const text = new TextDecoder('utf-8').decode(arrayBuffer);
+
+        const rows = [];
+        const lines = text.split(/\r?\n/).filter(line => line.trim() !== "");
+        for (const line of lines) {
+          const cells = [];
+          let current = '', inQuotes = false;
+          for (let i = 0; i < line.length; i++) {
+            const char = line[i];
+            if (char === '"') inQuotes = !inQuotes;
+            else if (char === ',' && !inQuotes) {
+              cells.push(current.trim().replace(/^"|"$/g, ""));
+              current = '';
+            } else current += char;
+          }
+          cells.push(current.trim().replace(/^"|"$/g, ""));
+          rows.push(cells);
+        }
+
+        const tableHead = document.querySelector('#data-table thead');
+        const tableBody = document.querySelector('#data-table tbody');
+        tableHead.innerHTML = '';
+        tableBody.innerHTML = '';
+
+        // Header
+        const headerRow = document.createElement('tr');
+        rows[0].forEach(col => {
+          const th = document.createElement('th');
+          th.textContent = col;
+          headerRow.appendChild(th);
+        });
+        tableHead.appendChild(headerRow);
+
+        // Rows
+        rows.slice(1).forEach(row => {
+          const tr = document.createElement('tr');
+          row.forEach((col, idx) => {
+            const td = document.createElement('td');
+            td.setAttribute('data-label', rows[0][idx]);
+
+            // Business name linked to website
+            if (idx === 0 && row[2]?.startsWith('http')) {
+              const a = document.createElement('a');
+              a.href = row[2];
+              a.textContent = col;
+              a.target = "_blank";
+              a.style.fontWeight = "600";
+              td.appendChild(a);
+            } 
+            // Website link clickable
+            else if (idx === 2 && col.startsWith('http')) {
+              const a = document.createElement('a');
+              a.href = col;
+              a.textContent = col;
+              a.target = "_blank";
+              td.appendChild(a);
+            } 
+            else {
+              td.textContent = col;
+            }
+
+            tr.appendChild(td);
+          });
+          tableBody.appendChild(tr);
+        });
+      }
+      loadCSV();
+    </script>
+  </body>
+</html>

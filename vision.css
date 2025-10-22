@@ -1,0 +1,120 @@
+/* ----- Color Palette ----- */
+:root {
+  --lavender-light: #e8def8;
+  --lavender: #a882c1;
+  --lavender-mid: #c3a1d8;
+  --lavender-dark: #654a70;
+  --pink-soft: #fde6ee;
+  --white: #ffffff;
+  --text-dark: #2e2e2e;
+}
+
+/* ----- Base Layout ----- */
+body {
+  font-family: "Inter", Arial, sans-serif;
+  background: var(--lavender-light);
+  color: var(--text-dark);
+  margin: 0;
+  padding: 1rem;
+}
+
+h1 {
+  text-align: center;
+  font-size: 1.8rem;
+  color: var(--lavender-dark);
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--white);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 0.9rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: var(--lavender);
+  color: var(--white);
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: var(--pink-soft);
+}
+
+tr:hover {
+  background-color: var(--lavender-mid);
+  color: var(--white);
+  transition: 0.2s ease-in-out;
+}
+
+a {
+  color: var(--lavender-dark);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ----- Responsive Design ----- */
+@media (max-width: 768px) {
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tr {
+    margin-bottom: 1.2rem;
+    background: var(--lavender-mid);
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  td {
+    border: none;
+    padding: 0.5rem 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: var(--lavender-dark);
+    margin-bottom: 0.25rem;
+  }
+
+  td[data-label="NOTES"],
+  td[data-label="ADDITIONAL NOTES"] {
+    line-height: 1.5;
+    margin-top: 0.4rem;
+    background: var(--lavender);
+    color: var(--white);
+    padding: 0.8rem;
+    border-radius: 8px;
+    text-align: left;
+  }
+
+  td[data-label="NOTES"] a,
+  td[data-label="ADDITIONAL NOTES"] a {
+    color: var(--white);
+  }
+
+  td a {
+    word-break: break-word;
+  }
+}
